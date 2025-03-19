@@ -1,0 +1,47 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlserver"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    UserID     Int      @id @default(autoincrement())
+    Username   String
+    ShiftType  String
+    Assignments EventAssignment[]
+}
+
+model Shift {
+    ShiftID   Int    @id @default(autoincrement())
+    ShiftName String
+    StartTime String
+    EndTime   String
+}
+
+model Machine {
+    MachineID   Int      @id @default(autoincrement())
+    MachineName String
+    Assignments EventAssignment[]
+}
+
+model Event {
+    EventID        Int      @id @default(autoincrement())
+    EventName      String
+    StartDateTime  DateTime
+    EndDateTime    DateTime
+    ShiftAssignment String
+    Assignments    EventAssignment[]
+}
+
+model EventAssignment {
+    AssignmentID Int    @id @default(autoincrement())
+    EventID      Int
+    UserID       Int
+    MachineID    Int
+    Event        Event  @relation(fields: [EventID], references: [EventID])
+    User         User   @relation(fields: [UserID], references: [UserID])
+    Machine      Machine @relation(fields: [MachineID], references: [MachineID])
+}

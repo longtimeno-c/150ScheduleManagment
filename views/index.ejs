@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream150</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Stream150 Schedule</h1>
+
+    <!-- Event List -->
+    <section>
+        <h2>Events</h2>
+        <% events.forEach(event => { %>
+            <div class="event-card <%= event.ShiftAssignment.toLowerCase() %>">
+                <h3><%= event.EventName %></h3>
+                <p><%= new Date(event.StartDateTime).toLocaleString() %> - <%= new Date(event.EndDateTime).toLocaleString() %></p>
+                <p>Shift: <%= event.ShiftAssignment %></p>
+                <ul>
+                    <% event.Assignments.forEach(a => { %>
+                        <li><%= a.User.Username %> on <%= a.Machine.MachineName %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% }) %>
+    </section>
+
+    <!-- Event Creation Form -->
+    <section>
+        <h2>Create Event</h2>
+        <form action="/events" method="POST">
+            <label>Event Name: <input type="text" name="eventName" required></label><br>
+            <label>Start: <input type="datetime-local" name="startDateTime" required></label><br>
+            <label>End: <input type="datetime-local" name="endDateTime" required></label><br>
+            <label>Shift:
+                <select name="shiftAssignment" required>
+                    <option value="Day">Day</option>
+                    <option value="Night">Night</option>
+                    <option value="Both">Both</option>
+                </select>
+            </label><br>
+
+            <!-- Dynamic Assignment Fields -->
+            <div id="assignments">
+                <h3>Assignments</h3>
+                <div class="assignment">
+                    <select name="userId" class="user-select">
+                        <% users.forEach(user => { %>
+                            <option value="<%= user.UserID %>"><%= user.Username %> (<%= user.ShiftType %>)</option>
+                        <% }) %>
+                    </select>
+                    <select name="machineId" class="machine-select">
+                        <% machines.forEach(machine => { %>
+                            <option value="<%= machine.MachineID %>"><%= machine.MachineName %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+            <button type="button" onclick="addAssignment()">Add Another Assignment</button><br>
+            <input type="hidden" name="assignments" id="assignments-data">
+            <button type="submit" onclick="prepareAssignments()">Create Event</button>
+        </form>
+    </section>
+
+    <script>
+        function addAssignment() {
+            const assignmentDiv = document.createElement('div');
+            assignmentDiv.className = 'assignment';
+            assignmentDiv.innerHTML = `
+                <select name="userId" class="user-select">
+                    <% users.forEach(user => { %>
+                        <option value="<%= user.UserID %>"><%= user.Username %> (<%= user.ShiftType %>)</option>
+                    <% }) %>
+                </select>
+                <select name="machineId" class="machine-select">
+                    <% machines.forEach(machine => { %>
+                        <option value="<%= machine.MachineID %>"><%= machine.MachineName %></option>
+                    <% }) %>
+                </select>
+            `;
+            document.getElementById('assignments').appendChild(assignmentDiv);
+        }
+
+        function prepareAssignments() {
+            const assignments = [];
+            document.querySelectorAll('.assignment').forEach(a => {
+                const userId = a.querySelector('.user-select').value;
+                const machineId = a.querySelector('.machine-select').value;
+                assignments.push({ userId, machineId });
+            });
+            document.getElementById('assignments-data').value = JSON.stringify(assignments);
+        }
+    </script>
+</body>
+</html>

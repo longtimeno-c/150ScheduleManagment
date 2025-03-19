@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #ffcc00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.event-card {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.event-card:hover {
+    transform: scale(1.02);
+}
+
+.day {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+}
+
+.night {
+    background: linear-gradient(to right, #6b48ff, #00ddeb);
+}
+
+.both {
+    background: linear-gradient(to right, #ff00cc, #333399);
+}
+
+form {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+label, input, select, button {
+    margin: 10px 0;
+    display: block;
+}
+
+input, select {
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+}
+
+button {
+    background: #ffcc00;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #e6b800;
+}
+
+.assignment {
+    margin: 10px 0;
+}
